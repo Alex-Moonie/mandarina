@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Felices 18, mi Príncipe!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;700&display=swap');
+
+        body, html { margin: 0; padding: 0; height: 100vh; overflow: hidden; font-family: 'Quicksand', sans-serif; }
+
+        #intro-festiva {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, #ff006e, #8338ec, #3a86ff, #ffbe0b, #fb5607);
+            background-size: 400% 400%;
+            animation: gradientBg 3s ease infinite;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        @keyframes gradientBg { 0% {background-position: 0% 50%;} 50% {background-position: 100% 50%;} 100% {background-position: 0% 50%;} }
+        .pastel-principal { font-size: 8rem; filter: drop-shadow(0 0 20px rgba(255,255,255,0.8)); animation: pulse 1s infinite alternate; }
+        .mensaje-pastel { color: white; font-family: 'Dancing Script', cursive; font-size: 2em; text-shadow: 2px 2px 10px rgba(0,0,0,0.3); margin-top: 20px; text-align: center; }
+        @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.1); } }
+
+        #main-content {
+            height: 100vh;
+            background: linear-gradient(to bottom, #020107 0%, #201b46 100%);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .star { position: absolute; background: white; border-radius: 50%; animation: blink 2s infinite ease-in-out; }
+        .lucero { position: absolute; border-radius: 50%; filter: blur(2px); animation: colorBlink 3s infinite; }
+        @keyframes colorBlink { 0%, 100% { opacity: 0.2; transform: scale(1); } 50% { opacity: 1; transform: scale(1.5); } 0% { background: #ff006e; } 25% { background: #3a86ff; } 50% { background: #ffbe0b; } 75% { background: #8338ec; } }
+        @keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+        .container {
+            position: relative; z-index: 10; text-align: center;
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(12px);
+            padding: 25px; border-radius: 25px; width: 85%; max-width: 400px;
+            max-height: 85vh; overflow-y: auto;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .container::-webkit-scrollbar { width: 4px; }
+        .container::-webkit-scrollbar-thumb { background: #FFD700; border-radius: 10px; }
+
+        .pregunta-box { display: none; }
+        .pregunta-box.active { display: block; animation: fadeIn 0.5s; }
+        .pregunta-box p { color: #FFD700; font-size: 1.3em; font-weight: bold; text-shadow: 0 0 10px rgba(255, 215, 0, 0.7); animation: goldenGlow 2s infinite alternate; }
+        @keyframes goldenGlow { from { text-shadow: 0 0 10px rgba(255, 215, 0, 0.7); } to { text-shadow: 0 0 25px rgba(255, 215, 0, 1); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        input { padding: 12px; border-radius: 15px; border: none; width: 85%; margin: 15px 0; outline: none; background: rgba(255,255,255,0.9); }
+        button { background: #4B5320; color: white; border: 3px solid #FFD700; padding: 12px 25px; border-radius: 25px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button:hover { transform: scale(1.1); background: #5b6335; }
+
+        #popup-mensaje {
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: #fff; padding: 25px; border-radius: 20px; z-index: 1100;
+            text-align: center; width: 80%; max-width: 300px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        #popup-mensaje p { font-family: 'Dancing Script', cursive; font-size: 1.5em; color: #4B5320; margin-bottom: 20px; }
+
+        /* DISEÑO CARTA VINTAGE */
+        .carta-vintage {
+            background: #fdf5e6;
+            background-image: radial-gradient(#f3e5ab 1px, transparent 0);
+            background-size: 20px 20px;
+            color: #5d4037;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.1), 5px 5px 15px rgba(0,0,0,0.3);
+            border: 1px solid #d2b48c;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.4em;
+            line-height: 1.6;
+            text-align: left;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .carta-vintage::before {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom right, rgba(255,255,255,0.2), transparent);
+            pointer-events: none;
+        }
+
+        .video-box { width: 100%; border-radius: 10px; overflow: hidden; border: 5px solid #4B5320; margin-bottom: 15px; }
+        .titulo-brillante { font-family: 'Dancing Script', cursive; font-size: 2.2em; color: #fff; text-shadow: 0 0 15px #FFD700; }
+    </style>
+</head>
+<body>
+
+    <audio id="musica-cumple" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="intro-festiva" onclick="iniciarSorpresa()">
+        <div class="pastel-principal">🎂</div>
+        <p class="mensaje-pastel">toca el pastelito mi amor 💗</p>
+    </div>
+
+    <div id="main-content">
+        <div id="stars-container"></div>
+
+        <div id="popup-mensaje">
+            <p id="texto-tierno"></p>
+            <button onclick="cerrarPopup()">Siguiente 💚</button>
+        </div>
+
+        <div id="quiz-container" class="container">
+            <div id="q1" class="pregunta-box active">
+                <p>¿Quién es la persona más importante en mi vida? 🧸</p>
+                <input type="text" id="ans1" placeholder="Responde aquí...">
+                <br><button onclick="mostrarMensaje('ERES TÚ MI PRINCIPE!! 😚', 1)">Responder</button>
+            </div>
+            <div id="q2" class="pregunta-box">
+                <p>¿Quien es el chico más lindo, dulce, adorable de ojitos bonitos con un cabello negro tan hermoso?? 💝</p>
+                <input type="text" id="ans2">
+                <br><button onclick="mostrarMensaje('TUPIII MI PRINCIPITOOO AMON!!! 🤭💕', 2)">Responder</button>
+            </div>
+            <div id="q3" class="pregunta-box">
+                <p>¿Quién es el muchacho más dulce y amoroso que he conocido en mi vida? 💖</p>
+                <input type="text" id="ans3">
+                <br><button onclick="mostrarMensaje('OBVIAMENTEE MII PRINCIPITOO BOGABOOO!!! 😚💝', 3)">Responder</button>
+            </div>
+            <div id="q4" class="pregunta-box">
+                <p>¿Donde esta mi chiquitoo bello, cochinito y kgoncito? 👻💩</p>
+                <input type="text" id="ans4">
+                <br><button onclick="mostrarMensaje('AQUÍ TAA MI BEBÉEEE 😚🧻❣️', 4)">Responder</button>
+            </div>
+            <div id="q5" class="pregunta-box">
+                <p>DONDEEEE ESTA MIII CUMPLEAÑEROOOO!!! 😍❣️</p>
+                <input type="text" id="ans5">
+                <br><button onclick="mostrarMensaje('AQUÍ TAAAAAAAAA!!!!!! 😚💚', 5)">¡TERMINAR!</button>
+            </div>
+        </div>
+
+        <div id="bienvenida-container" class="container" style="display:none;">
+            <h1 class="titulo-brillante">BIENVENIDO MI LINDO Y ADORABLE CUMPLEAÑERO...💝</h1>
+            <div style="font-size: 80px; cursor: pointer;" onclick="abrirCarta()">💌</div>
+            <p style="color: white;">Toca el sobre mi vida</p>
+        </div>
+
+        <div id="tarjeta-final" class="container" style="display:none; background: none; border: none; backdrop-filter: none; box-shadow: none;">
+            <div class="video-box">
+                <video id="miVideo" controls playsinline loop style="width:100%;">
+                    <source src="regalo.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="carta-vintage">
+                <strong>✨¡FELICES 18 MI VIDA!✨</strong><br><br>
+                Gracias por ser tú mi amor, gracias por simplemente existir mi niño. ¿Sabías que usted es mi mundo entero mi amor? ¡HOY ES TU CUMPLEAÑOS 18 MI VIDA! ¿Lo puedes creer? Yo no, estoy en shock de saber que mi niño chiquitito ya creció. Me acuerdo todavía de cuando te vi por primera vez y me enamoré de ti.<br><br>
+                Quiero seguir en tu vida, seguir presenciando cada año en el que crezcas más y más corazón. Es un honor para mí ser tu novia, amiga, amante y FUTURA ESPOSA ☝️ Déjame estar a tu lado hasta que seamos viejitos jijiji. Qué orgullo saber que tú eres mi noviecito, que soy TU novia.<br><br>
+                Te adoro mi niño, te amoooo tanto corazón. Amo todo de ti: tu risa, tus ojitos bonitos, tu lunar, cómo se te enchinan los ojitos al reír, tu voz tan cálida y linda, tu sentido del humor, lo amoroso y sensible que eres. Si pudiera viviría pegada a ti para simplemente estar a tu lado, porque usted, ¡USTED ES MI MUNDO AMOR!<br><br>
+                Estoy orgullosa de ti, de lo que eres y lo que serás corazón. Mantén los ánimos y disfruta tu vida mi amor, así como este día cariño.<br><br>
+                TI AMU MUTO MUTO INFINITAMENTE TRES MILLONES EN TODOS LOS UNIVERSOS HASTA EL INFINITO Y MÁS ALLÁ!!! 🤭🌠💝
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        const audio = document.getElementById('musica-cumple');
+        let preguntaActual = 1;
+
+        function iniciarSorpresa() {
+            audio.volume = 0.4;
+            audio.play();
+            document.getElementById('intro-festiva').style.display = 'none';
+            document.getElementById('main-content').style.display = 'flex';
+            lanzarConfetti();
+        }
+
+        const starsContainer = document.getElementById('stars-container');
+        for (let i = 0; i < 150; i++) {
+            const isLucero = Math.random() > 0.8;
+            const element = document.createElement('div');
+            element.className = isLucero ? 'lucero' : 'star';
+            element.style.left = Math.random() * 100 + '%';
+            element.style.top = Math.random() * 100 + '%';
+            const size = isLucero ? (Math.random() * 5 + 2) : (Math.random() * 3);
+            element.style.width = size + 'px'; element.style.height = size + 'px';
+            element.style.animationDelay = Math.random() * 5 + 's';
+            starsContainer.appendChild(element);
+        }
+
+        function mostrarMensaje(t, n) {
+            document.getElementById('texto-tierno').innerText = t;
+            document.getElementById('popup-mensaje').style.display = 'block';
+            preguntaActual = n;
+            lanzarConfetti();
+        }
+
+        function cerrarPopup() {
+            document.getElementById('popup-mensaje').style.display = 'none';
+            document.getElementById('q' + preguntaActual).classList.remove('active');
+            if (preguntaActual < 5) {
+                document.getElementById('q' + (preguntaActual + 1)).classList.add('active');
+            } else {
+                document.getElementById('quiz-container').style.display = 'none';
+                document.getElementById('bienvenida-container').style.display = 'block';
+                lanzarConfetti();
+            }
+        }
+
+        function abrirCarta() {
+            document.getElementById('bienvenida-container').style.display = 'none';
+            document.getElementById('tarjeta-final').style.display = 'block';
+            document.getElementById('miVideo').play();
+            audio.volume = 0.2;
+            lanzarConfetti();
+        }
+
+        function lanzarConfetti() {
+            confetti({ particleCount: 100, spread: 70, colors: ['#ff006e', '#8338ec', '#3a86ff', '#ffbe0b', '#fb5607', '#FFD700'] });
+        }
+    </script>
+</body>
+</html>
